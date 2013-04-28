@@ -1,0 +1,114 @@
+html {
+	height: 100%;
+}
+body {
+	width: 100%;
+	height: 100%;	
+	margin: 0; 
+	padding: 0;
+}
+body, textarea {
+	font-family: Verdana, Helvetica, Arial; 	
+}
+
+#map-canvas {
+	width: 100%;
+	height: 100%;
+}
+
+#app-panel,
+#app-panel-background {
+	position: absolute;
+	top: 2em;
+	bottom: 2em;
+	left: 2em;
+	width: 400px;
+}
+
+#app-panel {
+	color: #fff;
+	z-index: 10;
+	margin: 0.5em;
+}
+#app-panel-background {
+	opacity: 0.8;
+	background-color: #333;
+	padding: 0.5em;
+}
+
+#app-panel .destinations {
+    position: absolute;
+    top: 0;
+	bottom: 62px;
+    width: 100%;
+    overflow: auto;	
+}
+	
+#app-panel .destination {
+	margin-bottom: 0.5em;
+}
+
+#app-panel .destination .title {
+	font-weight: bold;
+}
+
+#app-panel .destination .distance-total {
+	margin-left: 0.5em;
+	font-weight: normal;
+	font-size: smaller;
+}
+
+#app-panel .destination .distance-current {
+	margin-bottom: 0.5em;
+}
+
+#app-panel textarea.new-comment,
+#app-panel .add-destination textarea {
+	height: 18px;
+    line-height: 18px;
+    overflow: hidden;
+    resize: none;
+    text-transform: none;
+    font-size: 12px;
+    width: 90%;
+}
+
+#app-panel .add-destination {
+	position: absolute;
+	bottom: 0em;
+}
+
+#app-panel .add-destination .description {
+	font-size: smaller;
+}
+
+#app-panel .add-destination form {
+/* 	vertical-align: middle; */
+}
+
+#app-panel .add-destination input[type=submit] {
+	border: 1px solid black;
+	margin-left: 0.5em;
+	float: right;
+    height: 26px;	
+}
+
+#app-panel .comments {
+	font-style: italic;
+	font-size: smaller;
+}
+
+#app-panel .donations {
+	margin-bottom: 0.5em;
+}
+
+#app-panel .donations button {
+	background: none;
+	border: 1px solid #ffffff;
+	margin-left: 5px;
+	color: #ffffff;
+}
+
+#app-panel .donations button:hover {
+	border: 1px solid #ccd;
+}
