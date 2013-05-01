@@ -8,6 +8,7 @@ object ApplicationBuild extends Build {
     val appVersion      = "1.0-SNAPSHOT"
 
     val appDependencies = Seq(
+    	"commons-io" % "commons-io" % "2.4",
     	"com.google.code.morphia" % "morphia" % "0.99",
     	"com.google.code.morphia" % "morphia-logging-slf4j" % "0.99"
     )

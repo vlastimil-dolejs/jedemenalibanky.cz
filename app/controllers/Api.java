@@ -1,7 +1,16 @@
 package controllers;
 
+import java.awt.Graphics;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import models.Comment;
 import models.Destination;
@@ -88,6 +97,33 @@ public class Api extends Controller {
 		return ok(Json.toJson(result));
 	}
 
+	public static Result planeIcon(String rotation) {
+		InputStream imageStream = Application.class.getResourceAsStream("/public/images/plane-icon.png");
+		byte[] byteArray;
+		try {
+			BufferedImage image = ImageIO.read(imageStream);
+
+			double rotationRequired = Math.toRadians(Double.valueOf(rotation));
+			double locationX = image.getWidth() / 2;
+			double locationY = image.getHeight() / 2;
+			AffineTransform tx = AffineTransform.getRotateInstance(rotationRequired, locationX, locationY);
+			AffineTransformOp op = new AffineTransformOp(tx, AffineTransformOp.TYPE_BILINEAR);
+
+			BufferedImage rotatedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
+			Graphics graphics = rotatedImage.getGraphics();
+			graphics.drawImage(op.filter(image, null), 0, 0, null);
+			graphics.dispose();
+			
+			ByteArrayOutputStream rotatedImageStream = new ByteArrayOutputStream();
+			ImageIO.write(rotatedImage, "png", rotatedImageStream);
+			byteArray = rotatedImageStream.toByteArray();
+			
+			return ok(byteArray).as("image/png");
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
 	private static int calculateCurrentDonation(Destination destination) {
 		List<Donation> donations = Donation.findAllForDestination(destination);
 		

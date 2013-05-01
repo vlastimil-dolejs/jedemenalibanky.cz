@@ -3,6 +3,7 @@ $(function() {
 	var map = initializeMap();
 	var geocoder = new google.maps.Geocoder();
 	var mapLines = [];
+	var planeMarkers = [];
 	
 	function initializeMap() {
 		var mapOptions = {
@@ -173,30 +174,50 @@ $(function() {
 			path: path,
 			strokeColor: "#555",
 			strokeOpacity: 0.6,
-			strokeWeight: 2
+			strokeWeight: 2,
+			geodesic: true
 		});
 
 		line.setMap(map);
+		mapLines.push(line);
 		
-		var heading = google.maps.geometry.spherical.computeHeading(path[0], path[1]);
-		var currentEnd = google.maps.geometry.spherical.computeOffset(startOfMapPaths, destination.currentDistance() * 1000, heading);
-
-		var currentPath = [startOfMapPaths, currentEnd];
-		var currentLine = new google.maps.Polyline({
-			path: currentPath,
-			strokeColor: "#F00",
-			strokeOpacity: 0.8,
-			strokeWeight: 2
-		});
-
-		currentLine.setMap(map);
-		
-		mapLines.push(line, currentLine);
+		if (destination.currentDistance() > 0) {
+			var heading = google.maps.geometry.spherical.computeHeading(path[0], path[1]);
+			var currentEnd = google.maps.geometry.spherical.computeOffset(startOfMapPaths, destination.currentDistance() * 1000, heading);
+	
+			var currentPath = [startOfMapPaths, currentEnd];
+			var currentLine = new google.maps.Polyline({
+				path: currentPath,
+				strokeColor: "#5D5",
+				strokeOpacity: 0.8,
+				strokeWeight: 2,
+				geodesic: true
+			});
+	
+			currentLine.setMap(map);
+			
+			mapLines.push(currentLine);
+			
+			var planeMarker = new google.maps.Marker({
+			      position: currentEnd,
+			      map: map,
+			      icon: {
+			    	  url: '/api/planeIcon/' + heading,
+			    	  anchor: new google.maps.Point(22, 22)
+			      },
+			      rotation: 0.5
+			  });
+			
+			planeMarkers.push(planeMarker);
+		}
 	}
 	
 	function clearPathsFromMap() {
 		$.each(mapLines, function(index, line) {
 			line.setMap(null);
+		});
+		$.each(planeMarkers, function(index, planeMarker) {
+			planeMarker.setMap(null);
 		});
 	}
 
