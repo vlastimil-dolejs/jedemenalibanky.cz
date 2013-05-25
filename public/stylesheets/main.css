@@ -86,8 +86,7 @@ body, textarea {
 /* 	vertical-align: middle; */
 }
 
-#app-panel .add-destination input[type=submit] {
-	border: 1px solid black;
+#app-panel .add-destination button {
 	margin-left: 0.5em;
 	float: right;
     height: 26px;	
@@ -96,6 +95,17 @@ body, textarea {
 #app-panel .comments {
 	font-style: italic;
 	font-size: smaller;
+	max-height: 200px;
+	overflow: auto;
+}
+
+#app-panel .comments .comment {
+	margin-bottom: 5px;
+}
+
+#app-panel .comments .comment .date {
+	font-style: normal;
+	font-size: smaller;
 }
 
 #app-panel .donations {
@@ -103,12 +113,48 @@ body, textarea {
 }
 
 #app-panel .donations button {
-	background: none;
-	border: 1px solid #ffffff;
 	margin-left: 5px;
-	color: #ffffff;
+	width: 18%;
 }
 
-#app-panel .donations button:hover {
+#app-panel button,
+#about-panel button {
+	cursor: pointer;
+	background: none;
+	border: 1px solid #ffffff;
+	color: #ffffff;	
+}
+
+#app-panel button:hover,
+#about-panel button:hover {
 	border: 1px solid #ccd;
+}
+
+#about-panel,
+#about-panel-background {
+	position: absolute;
+	top: 2em;
+	bottom: 2em;
+	left: 500px;
+	width: 500px;
+	display: none;
+}
+
+#about-panel {
+	color: #fff;
+	z-index: 10;
+	margin: 0.5em;
+}
+#about-panel-background {
+	opacity: 0.8;
+	background-color: #333;
+	padding: 0.5em;
+}
+#about-panel #about-panel-footer {
+	margin-top: 1em;
+	font-size: smaller;
+	font-style: italic;
+}
+#about-panel #hide-about-button {
+	padding: 0.5em 1em;
 }

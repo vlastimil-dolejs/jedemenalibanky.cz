@@ -32,7 +32,8 @@ $(function() {
 		$.each(data, function(index, value) {
 			value.destination.id = value.destinationId;
 			value.destination.currentDistance = function() {
-				return Math.round(this.currentDonation / pricePerKm(this));
+				var current = Math.round(this.currentDonation / pricePerKm(this));
+				return current > this.distance ? this.distance : current;
 			}
 			destinationsPanel.append(createDestinationPanel(value.destination, value.comments));
 			
@@ -46,13 +47,13 @@ $(function() {
 	function createDestinationPanel(destination, comments) {
 		var destinationPanel = $('<div class="destination"></div');
 		destinationPanel.append('<div class="title">' + destination.name + '<span class="distance-total">(' + destination.distance + 'km)</span></div>');
-		destinationPanel.append('<div class="distance-current">' + destination.currentDistance() + 'km</div>');
+		destinationPanel.append('<div class="distance-current">nyní ujedeme: ' + destination.currentDistance() + 'km</div>');
 		
 		destinationPanel.append(createDonationsPanel(destination));
 		
 		var commentsPanel = $('<div class="comments"></div>');
 		$.each(comments, function(index, comment) {
-			commentsPanel.append('<div class="comment">' + comment.text + '<div class="date">' + /*comment.date +*/ '</div></div>');
+			commentsPanel.append('<div class="comment">' + comment.text + '<div class="date">' + getTimeAgoText(comment.date) + '</div></div>');
 		});
 		destinationPanel.append(commentsPanel);
 		
@@ -77,6 +78,20 @@ $(function() {
 			});
 
 		return destinationPanel;
+	}
+	
+	function getTimeAgoText(date) {
+		var secondsAgo = (new Date() - date) / 1000;
+		
+		if (secondsAgo < 60) {
+			return 'Před ' + Math.floor(secondsAgo) + 's';
+		} else if (secondsAgo < (60 * 60)) {
+			return 'Před ' + Math.floor(secondsAgo / 60) + 'min';
+		} else if (secondsAgo < (60 * 60 * 24)) {
+			return 'Před ' + Math.floor(secondsAgo / (60 * 60)) + 'hod';
+		} else {
+			return 'Před ' + Math.floor(secondsAgo / (60 * 60 * 24)) + ' dny';
+		}
 	}
 
 	function createDonationsPanel(destination) {
@@ -139,7 +154,7 @@ $(function() {
 			        
 			        if (buttonAdd == null) {
 			        	textarea.css('width', '80%');
-				        buttonAdd = $('<input type="submit" value="Přidat"></input>');
+				        buttonAdd = $('<button type="submit">Přidat</button>');
 				        form.append(buttonAdd);
 				        form.submit(function(e) {
 				        	e.preventDefault();
@@ -247,4 +262,14 @@ $(function() {
 	}
 
 	refreshData();
+	
+	if ($.cookie("about-hidden") != 'true') {
+		$('#about-panel-background').show();
+		$('#about-panel').show();
+		$('#hide-about-button').click(function() {
+			$('#about-panel').hide();
+			$('#about-panel-background').hide();
+			$.cookie("about-hidden", "true", { expires: 365 });
+		});
+	}
 });
